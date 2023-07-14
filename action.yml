@@ -1,0 +1,38 @@
+name: "Change PR description"
+description: "Changes the description of a Pull Request"
+inputs:
+  github-token:
+    description: "GitHub Token"
+    required: true
+  pr-number:
+    description: "Pull Request Number"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout tools repo
+      uses: actions/checkout@v3
+      with:
+        repository: "kieranklaassen/gpt-auto-pr-description-action"
+        ref: "main"
+
+    - name: Checkout app repo
+      uses: actions/checkout@v3
+      with:
+        path: app
+
+    - uses: ruby/setup-ruby@v1
+      # with:
+      #   bundler-cache: true
+
+    - name: Install Dependencies
+      run: |
+        bundle install
+      shell: bash
+
+    - id: change-description
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER: ${{ inputs.pr-number }}
+      run: bundle exec ruby run.rb
+      shell: bash
