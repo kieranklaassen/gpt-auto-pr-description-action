@@ -6,7 +6,7 @@ require 'uri'
 
 module PullRequestDescriptionService
   class Generator
-    EXCLUDED_DIRECTORIES = ['node_modules'].freeze
+    EXCLUDED_DIRECTORIES = ['node_modules', 'vendor'].freeze
 
     def initialize(repo, pr_number, github_repository)
       @repo = repo
@@ -29,7 +29,8 @@ module PullRequestDescriptionService
 
     # Finds template files in all directories
     def find_template_files
-      @template_files = Dir.glob("**/{,.[^.]}*/pull_request_template.md", File::FNM_DOTMATCH)
+      # This will find both 'pull_request_template.md' and 'PULL_REQUEST_TEMPLATE.md'
+      @template_files = Dir.glob("**/{,.[^.]}*/{pull_request_template.md,PULL_REQUEST_TEMPLATE.md}", File::FNM_DOTMATCH | File::FNM_CASEFOLD)
     end
 
     # Excludes paths that include directories specified in EXCLUDED_DIRECTORIES
