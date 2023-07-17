@@ -71,6 +71,9 @@ module PullRequestDescriptionService
         ```
 
         Give PR description using the format above, remove sections that are not relevant to the diff.
+
+        ```md
+
       PROMPT
 
       puts "Prompt: #{prompt}"
@@ -78,6 +81,7 @@ module PullRequestDescriptionService
       response = @openai_client.chat(
         parameters: {
           model: "gpt-3.5-turbo-16k", # Required.
+          # model: "gpt-4-32k-0613",
           messages: [
             {role: "system", content: "You are a helpful assistant that's going to help write a PR description."},
             {role: "user", content: prompt}
@@ -99,8 +103,20 @@ module PullRequestDescriptionService
     # @return [String] concatenated diff hunks
     def get_diff
       diff = @client.pull_request(@github_repository, @pr_number, accept: 'application/vnd.github.VERSION.diff')
+      token_count = count_tokens(diff)
+
+      # Cut the string down to the maximum length if it's too long
+      if token_count > 12000
+        diff = diff[0..(12000*4)] + '... [Diff truncated due to length]'
+      end
+
       puts "Diff: #{diff}"
       diff
+    end
+
+    # https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them
+    def count_tokens(text)
+      text.length / 4
     end
 
     # Updates the PR description on GitHub
