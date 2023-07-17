@@ -10,6 +10,9 @@ inputs:
   openai-token:
     description: "OpenAI Token"
     required: true
+  pull-request-template:
+    description: "Pull Request Template"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -19,10 +22,11 @@ runs:
         repository: "kieranklaassen/gpt-auto-pr-description-action"
         ref: "main"
 
-    - name: Checkout app repo
+    - name: Checkout tempalte repo
       uses: actions/checkout@v3
       with:
-        path: app
+        sparse-checkout: ${{ inputs.pull-request-template }}
+        sparse-checkout-cone-mode: false
 
     - uses: ruby/setup-ruby@v1
       with:
@@ -41,5 +45,6 @@ runs:
         REPO: ${{ github.repository }}
         BASE_BRANCH: "main" # update if base branch is not always 'main'
         HEAD_BRANCH: ${{ github.head_ref }} # use github.ref if not in a PR context
+        PULL_REQUEST_TEMPLATE: ${{ inputs.pull-request-template }}
       run: bundle exec ruby run.rb
       shell: bash
