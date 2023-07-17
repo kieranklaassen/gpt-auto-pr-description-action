@@ -31,6 +31,7 @@ module PullRequestDescriptionService
     def find_template_files
       # This will find both 'pull_request_template.md' and 'PULL_REQUEST_TEMPLATE.md'
       @template_files = Dir.glob("**/{,.[^.]}*/{pull_request_template.md,PULL_REQUEST_TEMPLATE.md}", File::FNM_DOTMATCH | File::FNM_CASEFOLD)
+      puts "Template files: #{@template_files}"
     end
 
     # Excludes paths that include directories specified in EXCLUDED_DIRECTORIES
