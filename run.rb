@@ -4,6 +4,7 @@ service = PullRequestDescriptionService::Generator.new(
   ENV['REPO'],
   ENV['PR_NUMBER'],
   ENV['GITHUB_REPOSITORY'],
+  ENV['TRIGGER'],
   ENV['PULL_REQUEST_TEMPLATE']
 )
 service.run

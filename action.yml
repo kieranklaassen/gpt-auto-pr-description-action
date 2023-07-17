@@ -13,20 +13,49 @@ inputs:
   pull-request-template:
     description: "Pull Request Template"
     required: false
+  trigger-word:
+    description: "Trigger for the action, (auto, or any trigger word in PR description)"
+    required: false
+    default: "auto"
+  openai-model:
+    description: "OpenAI model"
+    required: false
+    default: "gpt-3.5-turbo-16k"
+  skip-if-author-is:
+    description: "Skip if author is in this list, comma separated"
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
+    - name: skip-if-author-is
+      if: ${{ contains(inputs.skip-if-author-is, github.actor) }}
+      run: |
+        echo "Skipping because author is in skip-if-author-is list"
+        echo "Author: ${{ github.actor }}"
+        echo "Skip if author is: ${{ inputs.skip-if-author-is }}"
+        exit 0
+      shell: bash
+
     - name: Checkout tools repo
       uses: actions/checkout@v3
       with:
         repository: "kieranklaassen/gpt-auto-pr-description-action"
         ref: "main"
 
-    - name: Checkout tempalte repo
+    - name: Checkout template file
       uses: actions/checkout@v3
       with:
         sparse-checkout: ${{ inputs.pull-request-template }}
         sparse-checkout-cone-mode: false
+        path: "templates"
+
+    # Check that template file exists and show contents
+    - name: Check template file
+      run: |
+        ls -la templates
+        cat templates/${{ inputs.pull-request-template }}
+      shell: bash
 
     - uses: ruby/setup-ruby@v1
       with:
@@ -46,5 +75,7 @@ runs:
         BASE_BRANCH: "main" # update if base branch is not always 'main'
         HEAD_BRANCH: ${{ github.head_ref }} # use github.ref if not in a PR context
         PULL_REQUEST_TEMPLATE: ${{ inputs.pull-request-template }}
+        TRIGGER: ${{ inputs.trigger }}
+        OPENAI_MODEL: ${{ inputs.openai-model }}
       run: bundle exec ruby run.rb
       shell: bash
