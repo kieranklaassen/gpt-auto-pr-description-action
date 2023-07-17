@@ -37,6 +37,8 @@ module PullRequestDescriptionService
       @template_files.reject! do |path|
         EXCLUDED_DIRECTORIES.any? { |dir| path.include?(dir) }
       end
+
+      puts "Template files: #{@template_files}"
     end
 
     # Generates the PR description based on commits and diff
