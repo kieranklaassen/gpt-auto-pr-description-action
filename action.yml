@@ -16,7 +16,6 @@ inputs:
   trigger-word:
     description: "Trigger for the action, (auto, or any trigger word in PR description)"
     required: false
-    default: "auto"
   openai-model:
     description: "OpenAI model"
     required: false
