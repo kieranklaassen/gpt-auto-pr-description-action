@@ -49,13 +49,6 @@ runs:
         sparse-checkout-cone-mode: false
         path: "templates"
 
-    # Check that template file exists and show contents
-    - name: Check template file
-      run: |
-        ls -la templates
-        cat templates/${{ inputs.pull-request-template }}
-      shell: bash
-
     - uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true

@@ -34,7 +34,7 @@ module PullRequestDescriptionService
     # @return [String] the generated PR description
     def generate_prompt
       # If the pull_request_template.md file is set, read its contents
-      template_markdown = if @pull_request_template
+      template_markdown = if @pull_request_template != ""
         File.read("templates/#{@pull_request_template}")
       else
         "Give a description of the changes in a list of this PR."
@@ -110,7 +110,7 @@ module PullRequestDescriptionService
     end
 
     def check_trigger
-      return true unless  @trigger.present?
+      return true if  @trigger == ""
       return true if @client.pull_request(@github_repository, @pr_number).body.include?(@trigger)
 
       false
