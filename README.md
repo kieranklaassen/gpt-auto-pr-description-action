@@ -46,8 +46,6 @@ This action depends on:
 - The actions/checkout action to check out the repository.
 - Your OpenAI token to access the OpenAI API. Make sure to store this token as a GitHub secret and pass it as an input to your workflow.
 
-Make sure to configure these dependencies correctly in your workflow to use this action.
-
 ## **Contributing**
 
 Contributions to improve this action are welcomed. Feel free to open an issue or pull request in this repository.
