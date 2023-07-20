@@ -67,7 +67,7 @@ runs:
         BASE_BRANCH: "main" # update if base branch is not always 'main'
         HEAD_BRANCH: ${{ github.head_ref }} # use github.ref if not in a PR context
         PULL_REQUEST_TEMPLATE: ${{ inputs.pull-request-template }}
-        TRIGGER: ${{ inputs.trigger }}
+        TRIGGER: ${{ inputs.trigger-word }}
         OPENAI_MODEL: ${{ inputs.openai-model }}
       run: bundle exec ruby run.rb
       shell: bash

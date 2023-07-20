@@ -107,7 +107,9 @@ module PullRequestDescriptionService
     end
 
     def check_trigger
-      return true if  @trigger == ""
+      puts "Checking trigger '#{@trigger}'"
+
+      return true if  @trigger == "" || @trigger.nil?
       return true if @client.pull_request(@github_repository, @pr_number).body.include?(@trigger)
 
       false
