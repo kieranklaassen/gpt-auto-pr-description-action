@@ -19,7 +19,7 @@ inputs:
   openai-model:
     description: "OpenAI model"
     required: false
-    default: "gpt-3.5-turbo-16k"
+    default: "gpt-4-1106-preview"
   skip-if-author-is:
     description: "Skip if author is in this list, comma separated"
     required: false
