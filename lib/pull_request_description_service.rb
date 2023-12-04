@@ -60,9 +60,6 @@ module PullRequestDescriptionService
         ```
 
         Give PR description using the format above, remove sections that are not relevant to the diff.
-
-        ```md
-
       PROMPT
 
       puts "Prompt: #{prompt}"
